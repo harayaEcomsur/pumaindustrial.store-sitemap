@@ -94,7 +94,7 @@
   ],
   "credentialType": "absolute",
   "scripts": {
-    "prereleasy": "bash lint.sh"
+    "prereleasy": "powershell -File lint.ps1"
   },
   "settingsSchema": {
     "title": "VTEX Store sitemap",
