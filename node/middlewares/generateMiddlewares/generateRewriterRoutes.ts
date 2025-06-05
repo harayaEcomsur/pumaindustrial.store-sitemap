@@ -21,8 +21,9 @@ const LIST_LIMIT = 300
 
 type RoutesByBinding = Record<string, Record<string, Route[]>>
 
-const createRoutesByBinding = (routes: Internal[], report: Record<string, number>, storeBindings: Binding[], disableRoutesTerm: string) => {
+const createRoutesByBinding = (routes: Internal[], report: Record<string, number>, storeBindings: Binding[], disableRoutesTerm: string[], enableRoutesTerm: string[]) => {
   const storeBindingsIds = storeBindings.map(({ id }) => id)
+  const processedPaths = new Set<string>()
   return routes.reduce(
     (acc, internal) => {
       report[internal.type] = (report[internal.type] || 0) + 1
@@ -31,10 +32,14 @@ const createRoutesByBinding = (routes: Internal[], report: Record<string, number
         internal.type !== 'product' &&
         !internal.disableSitemapEntry &&
         storeBindingsIds.includes(internal.binding)
-      if (disableRoutesTerm) {
-        validRoute = validRoute && !internal.from.includes(disableRoutesTerm)
+      if (disableRoutesTerm && disableRoutesTerm.length > 0) {
+        validRoute = validRoute && !disableRoutesTerm.some(term => internal.from.includes(term))
       }
-      if (validRoute) {
+      if (enableRoutesTerm && enableRoutesTerm.length > 0) {
+        validRoute = validRoute || enableRoutesTerm.some(term => internal.from.includes(term))
+      }
+      if (validRoute && !processedPaths.has(internal.from)) {
+        processedPaths.add(internal.from)
         const { binding } = internal
         const bindingRoutes: Route[] = Rpath([binding, internal.type], acc) || []
         const route: Route = {
@@ -99,6 +104,7 @@ export async function generateRewriterRoutes(ctx: EventContext, nextMiddleware: 
   const {
     count,
     disableRoutesTerm,
+    enableRoutesTerm,
     generationId,
     next,
     report,
@@ -109,7 +115,7 @@ export async function generateRewriterRoutes(ctx: EventContext, nextMiddleware: 
   const responseNext = response.next
 
   const storeBindings = await getStoreBindings(tenant)
-  const routesByBinding = createRoutesByBinding(routes, report, storeBindings, disableRoutesTerm)
+  const routesByBinding = createRoutesByBinding(routes, report, storeBindings, disableRoutesTerm, enableRoutesTerm)
 
   await Promise.all(
     Object.keys(routesByBinding).map(saveRoutes(routesByBinding, count, ctx.clients))
@@ -119,6 +125,7 @@ export async function generateRewriterRoutes(ctx: EventContext, nextMiddleware: 
     const payload: RewriterRoutesGenerationEvent = {
       count: count + 1,
       disableRoutesTerm,
+      enableRoutesTerm,
       generationId,
       next: responseNext,
       report,

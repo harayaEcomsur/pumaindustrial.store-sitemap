@@ -7,7 +7,7 @@
         "actions": ["post", "get"],
         "effect": "allow",
         "resources": [
-          "vrn:vtex.store-sitemap:{{region}}:{{account}}:{{workspace}}:/_v/graphql"
+          "vrn:pumaindustrial.store-sitemap:{{region}}:{{account}}:{{workspace}}:/_v/graphql"
         ]
       }
     ]

@@ -26,6 +26,7 @@ const DEFAULT_REWRITER_ROUTES_PAYLOAD = {
   generationId: '1',
   next: null,
   report: {},
+  disableRoutesTerm: [],
 }
 
 const DEFAULT_PRODUCT_ROUTES_PAYLOAD: ProductRoutesGenerationEvent = {
@@ -71,7 +72,8 @@ describe('Test generate sitemap', () => {
       state: {
         ...state.object,
         settings: {
-          disableRoutesTerm: '',
+          disableRoutesTerm: [],
+          enableRoutesTerm: [],
           enableAppsRoutes: true,
           enableNavigationRoutes: true,
           enableProductRoutes: true,
@@ -90,7 +92,10 @@ describe('Test generate sitemap', () => {
     expect(eventSent).toHaveBeenCalledWith(
       '',
       GENERATE_REWRITER_ROUTES_EVENT,
-      DEFAULT_REWRITER_ROUTES_PAYLOAD
+      {
+        ...DEFAULT_REWRITER_ROUTES_PAYLOAD,
+        disableRoutesTerm: [],
+      }
     )
     expect(eventSent).toHaveBeenCalledWith(
       '',
@@ -106,7 +111,8 @@ describe('Test generate sitemap', () => {
 
   it('Should send only enabled events', async () => {
     context.state.settings = {
-      disableRoutesTerm: '',
+      disableRoutesTerm: [],
+      enableRoutesTerm: [],
       enableAppsRoutes: true,
       enableNavigationRoutes: true,
       enableProductRoutes: false,
@@ -128,7 +134,8 @@ describe('Test generate sitemap', () => {
 
     jest.clearAllMocks()
     context.state.settings = {
-      disableRoutesTerm: '',
+      disableRoutesTerm: [],
+      enableRoutesTerm: [],
       enableAppsRoutes: false,
       enableNavigationRoutes: false,
       enableProductRoutes: true,

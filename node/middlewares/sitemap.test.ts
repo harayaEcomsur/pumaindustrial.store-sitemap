@@ -110,7 +110,8 @@ describe('Test sitemap middleware', () => {
         matchingBindings: [matchingBindings[0]],
         rootPath: '',
         settings: {
-          disableRoutesTerm: '',
+          disableRoutesTerm: [],
+          enableRoutesTerm: [],
           enableAppsRoutes: true,
           enableNavigationRoutes: true,
           enableProductRoutes: true,

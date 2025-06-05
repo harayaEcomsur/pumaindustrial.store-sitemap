@@ -1,8 +1,8 @@
 {
   "$schema": "https://raw.githubusercontent.com/vtex/node-vtex-api/master/gen/manifest.schema",
   "name": "store-sitemap",
-  "vendor": "vtex",
-  "version": "2.16.7",
+  "vendor": "pumaindustrial",
+  "version": "0.0.1",
   "title": "Sitemap",
   "description": "Sitemap for vtex.store",
   "mustUpdateAt": "2019-08-01",
@@ -119,10 +119,22 @@
         "default": true
       },
       "disableRoutesTerm": {
-        "title": "Disable routes from userRoutes with the following string",
-        "description": "Routes that include the string below will be excluded from the sitemap. Useful for selecting which pages will be in that folder.",
-        "default": "",
-        "type": "string"
+        "title": "Disable routes from userRoutes with the following strings",
+        "description": "Routes that include any of the strings below will be excluded from the sitemap. Useful for selecting which pages will be in that folder.",
+        "default": [],
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "enableRoutesTerm": {
+        "title": "Enable specific routes in sitemap",
+        "description": "Routes that include any of these strings will be included in the sitemap, even if they match a disableRoutesTerm pattern.",
+        "default": [],
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
       },
       "ignoreBindings": {
         "title": "Ignore bindings",

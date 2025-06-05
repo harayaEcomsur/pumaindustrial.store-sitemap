@@ -25,15 +25,18 @@ const DEFAULT_REWRITER_ROUTES_PAYLOAD = {
   count: 0,
   next: null,
   report: {},
+  disableRoutesTerm: [],
+  enableRoutesTerm: [],
 }
 
 export async function generateSitemap(ctx: EventContext) {
   const { clients: { events }, body: { generationId }, state: { settings } }  = ctx
-  const disableRoutesTerm = settings.disableRoutesTerm
+  const { disableRoutesTerm, enableRoutesTerm } = settings
   if (settings.enableNavigationRoutes) {
     events.sendEvent('', GENERATE_REWRITER_ROUTES_EVENT, {
       ...DEFAULT_REWRITER_ROUTES_PAYLOAD,
       disableRoutesTerm,
+      enableRoutesTerm,
       generationId,
     } as RewriterRoutesGenerationEvent)
   }

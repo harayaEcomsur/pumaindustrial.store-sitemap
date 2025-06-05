@@ -169,6 +169,7 @@ describe('Test rewriter routes generation', () => {
       ...contextMock.object,
       body: {
         count: 0,
+        disableRoutesTerm: [],
         generationId: '1',
         next: null,
         report: {},
@@ -176,6 +177,14 @@ describe('Test rewriter routes generation', () => {
       clients: new ClientsImpl({}, ioContext.object),
       state: {
         ...state.object,
+        settings: {
+          disableRoutesTerm: [],
+          enableRoutesTerm: [],
+          enableAppsRoutes: true,
+          enableNavigationRoutes: true,
+          enableProductRoutes: true,
+          ignoreBindings: false,
+        },
       },
       vtex: {
         ...ioContext.object,

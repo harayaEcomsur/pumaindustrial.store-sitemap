@@ -51,7 +51,7 @@ const isProductSearchResponseEmpty = async (
       {
         persistedQuery: {
           provider: 'vtex.search-graphql@0.x',
-          sender: 'vtex.store-sitemap@2.x',
+          sender: 'pumaindustrial.store-sitemap@2.x',
         },
       }
     )
