@@ -3,11 +3,11 @@ import * as cheerio from 'cheerio'
 import { MultipleSitemapGenerationError } from '../errors'
 import {
   EXTENDED_INDEX_FILE,
-  xmlTruncateNodes,
   getBucket,
   hashString,
   SitemapNotFound,
   startSitemapGeneration,
+  xmlTruncateNodes,
 } from '../utils'
 import { currentDate, SitemapIndex } from './generateMiddlewares/utils'
 

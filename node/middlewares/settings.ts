@@ -6,12 +6,12 @@ import {
 } from './generateMiddlewares/utils'
 
 export interface Settings {
-  enableAppsRoutes: boolean
-  enableProductRoutes: boolean
-  enableNavigationRoutes: boolean
-  ignoreBindings: boolean
   disableRoutesTerm: string[]
+  enableAppsRoutes: boolean
+  enableNavigationRoutes: boolean
+  enableProductRoutes: boolean
   enableRoutesTerm: string[]
+  ignoreBindings: boolean
 }
 
 const VTEX_APP_ID = process.env.VTEX_APP_ID!
@@ -19,19 +19,19 @@ const VTEX_APP_AT_MAJOR = appIdToAppAtMajor(VTEX_APP_ID)
 
 const DEFAULT_SETTINGS = {
   disableRoutesTerm: [],
-  enableRoutesTerm: [],
   enableAppsRoutes: true,
   enableNavigationRoutes: true,
   enableProductRoutes: true,
+  enableRoutesTerm: [],
   ignoreBindings: false,
 }
 
 const INDEX_MAP = {
   disableRoutesTerm: '',
-  enableRoutesTerm: '',
   enableAppsRoutes: APPS_ROUTES_INDEX,
   enableNavigationRoutes: REWRITER_ROUTES_INDEX,
   enableProductRoutes: PRODUCT_ROUTES_INDEX,
+  enableRoutesTerm: '',
   ignoreBindings: '',
 }
 

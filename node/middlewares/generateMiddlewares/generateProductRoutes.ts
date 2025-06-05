@@ -2,13 +2,13 @@ import { Binding, Logger, VBase } from '@vtex/api'
 import { isEmpty, zipObj } from 'ramda'
 import { Product } from 'vtex.catalog-graphql'
 
+import { GraphQLServer, ProductNotFound } from '../../clients/graphqlServer'
 import {
   getBucket,
   getStoreBindings,
   hashString,
   TENANT_CACHE_TTL_S,
 } from '../../utils'
-import { GraphQLServer, ProductNotFound } from '../../clients/graphqlServer'
 import {
   createFileName,
   createTranslator,

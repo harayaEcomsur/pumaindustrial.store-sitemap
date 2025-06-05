@@ -73,10 +73,10 @@ describe('Test generate sitemap', () => {
         ...state.object,
         settings: {
           disableRoutesTerm: [],
-          enableRoutesTerm: [],
           enableAppsRoutes: true,
           enableNavigationRoutes: true,
           enableProductRoutes: true,
+          enableRoutesTerm: [],
           ignoreBindings: false,
         },
       },
@@ -112,10 +112,10 @@ describe('Test generate sitemap', () => {
   it('Should send only enabled events', async () => {
     context.state.settings = {
       disableRoutesTerm: [],
-      enableRoutesTerm: [],
       enableAppsRoutes: true,
       enableNavigationRoutes: true,
       enableProductRoutes: false,
+      enableRoutesTerm: [],
       ignoreBindings: false,
     }
 
@@ -135,10 +135,10 @@ describe('Test generate sitemap', () => {
     jest.clearAllMocks()
     context.state.settings = {
       disableRoutesTerm: [],
-      enableRoutesTerm: [],
       enableAppsRoutes: false,
       enableNavigationRoutes: false,
       enableProductRoutes: true,
+      enableRoutesTerm: [],
       ignoreBindings: false,
     }
 

@@ -23,10 +23,10 @@ export async function generateSitemapFromREST(ctx: Context) {
 
 const DEFAULT_REWRITER_ROUTES_PAYLOAD = {
   count: 0,
-  next: null,
-  report: {},
   disableRoutesTerm: [],
   enableRoutesTerm: [],
+  next: null,
+  report: {},
 }
 
 export async function generateSitemap(ctx: EventContext) {
