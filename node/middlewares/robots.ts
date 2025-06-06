@@ -8,7 +8,7 @@ interface RobotsFile {
   robots: Record<string, string>
 }
 
-const SITEMAP_BUILD_FILE = 'dist/vtex.store-sitemap/build.json'
+const SITEMAP_BUILD_FILE = 'dist/pumaindustria.store-sitemap/build.json'
 
 const getRobotForBinding = async (
   bindingId: string,
