@@ -110,15 +110,24 @@ const sitemapIndex = async (ctx: Context) => {
 
     const lastUpdated = indexFiles[0].lastUpdated
 
-    const indexXML = index.map(entry =>
-      sitemapIndexEntry(
-        forwardedHost,
-        rootPath,
-        entry,
-        lastUpdated,
-        bindingAddress
+    const baseUrl = `https://${forwardedHost}${rootPath}`
+    const baseEntry = `<url>
+      <loc>${baseUrl}</loc>
+      <lastmod>${lastUpdated}</lastmod>
+    </url>`
+
+    const indexXML = [
+      baseEntry,
+      ...index.map(entry =>
+        sitemapIndexEntry(
+          forwardedHost,
+          rootPath,
+          entry,
+          lastUpdated,
+          bindingAddress
+        )
       )
-    )
+    ]
     $('sitemapindex').append(xmlTruncateNodes(indexXML))
     return $
   } catch (error) {

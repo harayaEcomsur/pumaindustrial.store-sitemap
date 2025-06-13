@@ -19,7 +19,7 @@ import {
 } from './utils'
 
 const APP_ROUTES_ENTITY = 'appsRoutes'
-const STORE_SITEMAP_BUILD_FILE =`/dist/pumaindustrial.store-sitemap/build.json`
+const STORE_SITEMAP_BUILD_FILE = `/dist/vtex.store-sitemap/build.json`
 const FILE_LIMIT = 5000
 
 interface SitemapBuild {
