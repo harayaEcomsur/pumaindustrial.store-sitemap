@@ -54,6 +54,16 @@ const sitemapIndex = async (ctx: Context) => {
     clients: { vbase },
   } = ctx
 
+  ctx.vtex.logger.info({
+    message: 'Starting sitemapIndex',
+    enabledIndexFiles,
+    forwardedHost,
+    binding,
+    bucket,
+    rootPath,
+    bindingAddress,
+  })
+
   const $ = cheerio.load(
     '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
     {
@@ -61,45 +71,64 @@ const sitemapIndex = async (ctx: Context) => {
     }
   )
 
-  const rawIndexFiles = await Promise.all([
-    ...enabledIndexFiles.map(indexFile =>
-      vbase.getJSON<SitemapIndex>(bucket, indexFile, true)
-    ),
-    vbase.getJSON<SitemapIndex>(
-      getBucket('', hashString(binding.id)),
-      EXTENDED_INDEX_FILE,
-      true
-    ),
-  ])
+  try {
+    const rawIndexFiles = await Promise.all([
+      ...enabledIndexFiles.map(indexFile =>
+        vbase.getJSON<SitemapIndex>(bucket, indexFile, true)
+      ),
+      vbase.getJSON<SitemapIndex>(
+        getBucket('', hashString(binding.id)),
+        EXTENDED_INDEX_FILE,
+        true
+      ),
+    ])
 
-  const indexFiles = rawIndexFiles.filter(Boolean)
+    ctx.vtex.logger.info({
+      message: 'Raw index files retrieved',
+      rawIndexFiles,
+    })
 
-  if (indexFiles.length === 0) {
-    throw new SitemapNotFound('Sitemap not found')
-  }
+    const indexFiles = rawIndexFiles.filter(Boolean)
 
-  const index = [
-    ...new Set(
-      indexFiles.reduce(
-        (acc, { index: fileIndex }) => acc.concat(fileIndex),
-        [] as string[]
+    if (indexFiles.length === 0) {
+      ctx.vtex.logger.error({
+        message: 'No index files found',
+        bucket,
+        bindingId: binding.id,
+      })
+      throw new SitemapNotFound('Sitemap not found')
+    }
+
+    const index = [
+      ...new Set(
+        indexFiles.reduce(
+          (acc, { index: fileIndex }) => acc.concat(fileIndex),
+          [] as string[]
+        )
+      ),
+    ]
+
+    const lastUpdated = indexFiles[0].lastUpdated
+
+    const indexXML = index.map(entry =>
+      sitemapIndexEntry(
+        forwardedHost,
+        rootPath,
+        entry,
+        lastUpdated,
+        bindingAddress
       )
-    ),
-  ]
-
-  const lastUpdated = indexFiles[0].lastUpdated
-
-  const indexXML = index.map(entry =>
-    sitemapIndexEntry(
-      forwardedHost,
-      rootPath,
-      entry,
-      lastUpdated,
-      bindingAddress
     )
-  )
-  $('sitemapindex').append(xmlTruncateNodes(indexXML))
-  return $
+    $('sitemapindex').append(xmlTruncateNodes(indexXML))
+    return $
+  } catch (error) {
+    ctx.vtex.logger.error({
+      message: 'Error in sitemapIndex',
+      error: error.message,
+      stack: error.stack,
+    })
+    throw error
+  }
 }
 
 const sitemapBindingIndex = async (ctx: Context) => {
@@ -132,6 +161,14 @@ export async function sitemap(ctx: Context, next: () => Promise<void>) {
     state: { matchingBindings, bindingAddress, rootPath, settings },
   } = ctx
 
+  ctx.vtex.logger.info({
+    message: 'Starting sitemap generation',
+    matchingBindings,
+    bindingAddress,
+    rootPath,
+    settings,
+  })
+
   const hasBindingIdentifier = rootPath || bindingAddress
   let $: any
   try {
@@ -144,12 +181,23 @@ export async function sitemap(ctx: Context, next: () => Promise<void>) {
         : await sitemapIndex(ctx)
     }
   } catch (err) {
+    ctx.vtex.logger.error({
+      message: 'Error in sitemap generation',
+      error: err.message,
+      stack: err.stack,
+    })
+
     if (err instanceof SitemapNotFound) {
       ctx.status = 404
       ctx.body = 'Generating sitemap...'
       ctx.vtex.logger.error(err.message)
       await startSitemapGeneration(ctx).catch(err => {
         if (!(err instanceof MultipleSitemapGenerationError)) {
+          ctx.vtex.logger.error({
+            message: 'Error in startSitemapGeneration',
+            error: err.message,
+            stack: err.stack,
+          })
           throw err
         }
       })

@@ -16,7 +16,7 @@
     },
     "generateSitemap": {
       "path": "/generate-sitemap",
-      "public": false
+      "public": true
     },
     "robots": {
       "path": "/robots.txt",
@@ -29,19 +29,19 @@
       "keys": ["sitemap.generate"]
     },
     "generateRewriterRoutes": {
-      "sender": "pumaindusuriaindustria.store-sitemap",
+      "sender": "pumaindustrial.store-sitemap",
       "keys": ["sitemap.generate:rewriter-routes"]
     },
     "generateProductRoutes": {
-      "sender": "pumaindustria.store-sitemap",
+      "sender": "pumaindustrial.store-sitemap",
       "keys": ["sitemap.generate:product-routes"]
     },
     "generateAppsRoutes": {
-      "sender": "pumaindustria.store-sitemap",
+      "sender": "pumaindustrial.store-sitemap",
       "keys": ["sitemap.generate:apps-routes"]
     },
     "groupEntries": {
-      "sender": "pumaindustria.store-sitemap",
+      "sender": "pumaindustrial.store-sitemap",
       "keys": ["sitemap.generate:group-entries"]
     }
   }

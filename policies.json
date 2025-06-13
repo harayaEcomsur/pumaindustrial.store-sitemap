@@ -11,5 +11,31 @@
         ]
       }
     ]
+  },
+  {
+    "name": "vbase-read-write",
+    "description": "Allows read and write access to VBase",
+    "statements": [
+      {
+        "actions": ["get", "put", "delete"],
+        "effect": "allow",
+        "resources": [
+          "vrn:vbase:{{region}}:{{account}}:{{workspace}}:*"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "catalog-api-proxy",
+    "description": "Allows access to catalog API",
+    "statements": [
+      {
+        "actions": ["get", "post"],
+        "effect": "allow",
+        "resources": [
+          "vrn:vtex.catalog-api-proxy:{{region}}:{{account}}:{{workspace}}:*"
+        ]
+      }
+    ]
   }
 ]
