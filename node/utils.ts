@@ -26,7 +26,7 @@ const validBinding = (path: string) => (binding: Binding) => {
   return matchesPath && isStoreBinding
 }
 
-export const xmlTruncateNodes = ( xml: string[], limit: number = MAX_CALL_STACK_SIZE) => 
+export const xmlTruncateNodes = ( xml: string[], limit: number = MAX_CALL_STACK_SIZE) =>
   xml.slice(0, limit).join('\n')
 
 export const notFound = <T>(fallback: T) => (error: any): T => {
@@ -67,17 +67,23 @@ export const getBucket = (prefix: string, bucketName: string) => `${prefix}_${bu
 export const startSitemapGeneration = async (ctx: Context, force?: boolean) => {
   const { clients: { vbase, events }, vtex: { logger } } = ctx
   const config = await vbase.getJSON<GenerationConfig>(CONFIG_BUCKET, GENERATION_CONFIG_FILE, true)
+
   if (config && validDate(config.endDate) && !force) {
     throw new MultipleSitemapGenerationError(config.endDate)
   }
+
+  await vbase.deleteFile(CONFIG_BUCKET, GENERATION_CONFIG_FILE).catch(() => {})
+
   const generationId = (Math.random() * 10000).toString()
   const caller = ctx.request.header['x-vtex-caller']
-  logger.info({ message: `New generation started by ${caller}`, generationId })
+  logger.info({ message: `New generation started by ${caller}`, generationId, force })
+
   await vbase.saveJSON<GenerationConfig>(CONFIG_BUCKET, GENERATION_CONFIG_FILE, {
     endDate: fiveDaysFromNowMS(),
     generationId,
   })
-  events.sendEvent('', GENERATE_SITEMAP_EVENT, { generationId })
+
+  events.sendEvent('', GENERATE_SITEMAP_EVENT, { generationId, force })
 }
 
 export const validDate = (endDate: string) => {

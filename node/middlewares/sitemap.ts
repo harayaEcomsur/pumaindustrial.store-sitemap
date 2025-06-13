@@ -161,14 +161,6 @@ export async function sitemap(ctx: Context, next: () => Promise<void>) {
     state: { matchingBindings, bindingAddress, rootPath, settings },
   } = ctx
 
-  ctx.vtex.logger.info({
-    message: 'Starting sitemap generation',
-    matchingBindings,
-    bindingAddress,
-    rootPath,
-    settings,
-  })
-
   const hasBindingIdentifier = rootPath || bindingAddress
   let $: any
   try {
@@ -181,23 +173,12 @@ export async function sitemap(ctx: Context, next: () => Promise<void>) {
         : await sitemapIndex(ctx)
     }
   } catch (err) {
-    ctx.vtex.logger.error({
-      message: 'Error in sitemap generation',
-      error: err.message,
-      stack: err.stack,
-    })
-
     if (err instanceof SitemapNotFound) {
       ctx.status = 404
       ctx.body = 'Generating sitemap...'
       ctx.vtex.logger.error(err.message)
-      await startSitemapGeneration(ctx).catch(err => {
+      await startSitemapGeneration(ctx, true).catch(err => {
         if (!(err instanceof MultipleSitemapGenerationError)) {
-          ctx.vtex.logger.error({
-            message: 'Error in startSitemapGeneration',
-            error: err.message,
-            stack: err.stack,
-          })
           throw err
         }
       })
