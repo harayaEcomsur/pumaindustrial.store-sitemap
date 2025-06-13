@@ -44,24 +44,24 @@ const sitemapBindingEntry = (
 const sitemapIndex = async (ctx: Context) => {
   const {
     state: {
+      binding,
+      bindingAddress,
+      bucket,
       enabledIndexFiles,
       forwardedHost,
-      binding,
-      bucket,
       rootPath,
-      bindingAddress,
     },
     clients: { vbase },
   } = ctx
 
   ctx.vtex.logger.info({
-    message: 'Starting sitemapIndex',
+    binding,
+    bindingAddress,
+    bucket,
     enabledIndexFiles,
     forwardedHost,
-    binding,
-    bucket,
+    message: 'Starting sitemapIndex',
     rootPath,
-    bindingAddress,
   })
 
   const $ = cheerio.load(
@@ -92,9 +92,9 @@ const sitemapIndex = async (ctx: Context) => {
 
     if (indexFiles.length === 0) {
       ctx.vtex.logger.error({
-        message: 'No index files found',
-        bucket,
         bindingId: binding.id,
+        bucket,
+        message: 'No index files found',
       })
       throw new SitemapNotFound('Sitemap not found')
     }
@@ -123,8 +123,8 @@ const sitemapIndex = async (ctx: Context) => {
     return $
   } catch (error) {
     ctx.vtex.logger.error({
-      message: 'Error in sitemapIndex',
       error: error.message,
+      message: 'Error in sitemapIndex',
       stack: error.stack,
     })
     throw error

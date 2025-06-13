@@ -23,10 +23,11 @@ const DEFAULT_APPS_ROUTES_PAYLOAD = {
 
 const DEFAULT_REWRITER_ROUTES_PAYLOAD = {
   count: 0,
+  disableRoutesTerm: [],
   generationId: '1',
   next: null,
   report: {},
-  disableRoutesTerm: [],
+
 }
 
 const DEFAULT_PRODUCT_ROUTES_PAYLOAD: ProductRoutesGenerationEvent = {
@@ -63,6 +64,15 @@ describe('Test generate sitemap', () => {
 
     jest.clearAllMocks()
 
+    const settings = {
+      disableRoutesTerm: [],
+      enableAppsRoutes: true,
+      enableNavigationRoutes: true,
+      enableProductRoutes: true,
+      enableRoutesTerm: [],
+      ignoreBindings: false,
+    }
+
     context = {
       ...contextMock.object,
       body: {
@@ -71,14 +81,7 @@ describe('Test generate sitemap', () => {
       clients: new ClientsImpl({}, ioContext.object),
       state: {
         ...state.object,
-        settings: {
-          disableRoutesTerm: [],
-          enableAppsRoutes: true,
-          enableNavigationRoutes: true,
-          enableProductRoutes: true,
-          enableRoutesTerm: [],
-          ignoreBindings: false,
-        },
+        settings,
       },
       vtex: {
         ...ioContext.object,

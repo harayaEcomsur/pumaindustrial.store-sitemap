@@ -72,7 +72,11 @@ export const startSitemapGeneration = async (ctx: Context, force?: boolean) => {
     throw new MultipleSitemapGenerationError(config.endDate)
   }
 
-  await vbase.deleteFile(CONFIG_BUCKET, GENERATION_CONFIG_FILE).catch(() => {})
+  try {
+    await vbase.deleteFile(CONFIG_BUCKET, GENERATION_CONFIG_FILE)
+  } catch (error) {
+    logger.warn({ message: 'Error deleting previous config', error: error.message })
+  }
 
   const generationId = (Math.random() * 10000).toString()
   const caller = ctx.request.header['x-vtex-caller']

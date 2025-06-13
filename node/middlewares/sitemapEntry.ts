@@ -95,7 +95,15 @@ export async function sitemapEntry(ctx: Context, next: () => Promise<void>) {
     return
   }
   const { routes, lastUpdated } = maybeRoutesInfo as SitemapEntry
-  const entryXML = routes.map((route: Route) => URLEntry(ctx, route, lastUpdated))
+
+  // Agregar la URL base (home) por defecto
+  const baseUrl = `https://${ctx.state.forwardedHost}${ctx.state.rootPath}`
+  const baseEntry = `<url>
+      <loc>${baseUrl}</loc>
+      <lastmod>${lastUpdated}</lastmod>
+    </url>`
+
+  const entryXML = [baseEntry, ...routes.map((route: Route) => URLEntry(ctx, route, lastUpdated))]
 
   $('urlset').append(entryXML.join('\n'))
 

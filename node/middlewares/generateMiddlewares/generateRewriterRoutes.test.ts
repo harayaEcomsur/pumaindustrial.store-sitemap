@@ -179,10 +179,10 @@ describe('Test rewriter routes generation', () => {
         ...state.object,
         settings: {
           disableRoutesTerm: [],
-          enableRoutesTerm: [],
           enableAppsRoutes: true,
           enableNavigationRoutes: true,
           enableProductRoutes: true,
+          enableRoutesTerm: [],
           ignoreBindings: false,
         },
       },
