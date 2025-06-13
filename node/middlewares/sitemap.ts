@@ -126,7 +126,7 @@ const sitemapIndex = async (ctx: Context) => {
           lastUpdated,
           bindingAddress
         )
-      )
+      ),
     ]
     $('sitemapindex').append(xmlTruncateNodes(indexXML))
     return $
