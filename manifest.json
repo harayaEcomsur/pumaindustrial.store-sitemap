@@ -121,7 +121,18 @@
       "disableRoutesTerm": {
         "title": "Disable routes from userRoutes with the following strings",
         "description": "Routes that include any of the strings below will be excluded from the sitemap. Useful for selecting which pages will be in that folder.",
-        "default": [],
+        "default": [
+          "/calzado-de-seguridad/",
+          "/ropa-de-trabajo/",
+          "/proteccion-auditiva/",
+          "/proteccion-respiratoria/",
+          "/proteccion-cabeza/",
+          "/proteccion-pies/",
+          "/proteccion-caidas/",
+          "/proteccion-manos-y-brazos",
+          "/proteccion-vista-y-mascaras",
+          "/salisbury"
+        ],
         "type": "array",
         "items": {
           "type": "string"
@@ -130,7 +141,14 @@
       "enableRoutesTerm": {
         "title": "Enable specific routes in sitemap",
         "description": "Routes that include any of these strings will be included in the sitemap, even if they match a disableRoutesTerm pattern.",
-        "default": [],
+        "default": [
+          "/calzado-de-seguridad/botines-de-seguridad",
+          "/stores",
+          "/contacto",
+          "/institucional",
+          "/nosotros",
+          "/store/"
+        ],
         "type": "array",
         "items": {
           "type": "string"
