@@ -71,23 +71,29 @@ const completeRoute = (rewriter: Rewriter, type: string) => async (route: Route)
   }
 }
 
-const saveRoutes = (routesByBinding: RoutesByBinding, count: number, clients: Clients) => async (bindingId: string) => {
+const saveRoutes = (routesByBinding: RoutesByBinding, count: number, clients: Clients, disableRoutesTerm: string[]) => async (bindingId: string) => {
   const { vbase, rewriter } = clients
   const bucket = getBucket(RAW_DATA_PREFIX, hashString(bindingId))
   const groupedRoutes = routesByBinding[bindingId]
   const newEntries = await Promise.all(
-    Object.keys(groupedRoutes).map(async entityType => {
-      const entityRoutes = await Promise.all(
-        routesByBinding[bindingId][entityType].map(completeRoute(rewriter, entityType))
-      )
-      const entry = createFileName(entityType, count)
-      const lastUpdated = currentDate()
-      await vbase.saveJSON<SitemapEntry>(bucket, entry, {
-        lastUpdated,
-        routes: entityRoutes,
+    Object.keys(groupedRoutes)
+      .filter(entityType => !disableRoutesTerm.some(term => {
+        // Permitir coincidencia tanto con y sin barra
+        const cleanTerm = term.replace(/^\//, '')
+        return entityType.includes(term) || entityType.includes(cleanTerm)
+      }))
+      .map(async entityType => {
+        const entityRoutes = await Promise.all(
+          routesByBinding[bindingId][entityType].map(completeRoute(rewriter, entityType))
+        )
+        const entry = createFileName(entityType, count)
+        const lastUpdated = currentDate()
+        await vbase.saveJSON<SitemapEntry>(bucket, entry, {
+          lastUpdated,
+          routes: entityRoutes,
+        })
+        return entry
       })
-      return entry
-    })
   )
   const { index } = await vbase.getJSON<SitemapIndex>(bucket, REWRITER_ROUTES_INDEX, true)
   await vbase.saveJSON<SitemapIndex>(bucket, REWRITER_ROUTES_INDEX, {
@@ -118,7 +124,7 @@ export async function generateRewriterRoutes(ctx: EventContext, nextMiddleware: 
   const routesByBinding = createRoutesByBinding(routes, report, storeBindings, disableRoutesTerm, enableRoutesTerm)
 
   await Promise.all(
-    Object.keys(routesByBinding).map(saveRoutes(routesByBinding, count, ctx.clients))
+    Object.keys(routesByBinding).map(saveRoutes(routesByBinding, count, ctx.clients, disableRoutesTerm))
   )
 
   if (responseNext) {

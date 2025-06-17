@@ -1,6 +1,7 @@
 import { appIdToAppAtMajor } from '@vtex/api'
 import {
   APPS_ROUTES_INDEX,
+  CUSTOM_ROUTES_INDEX,
   PRODUCT_ROUTES_INDEX,
   REWRITER_ROUTES_INDEX,
 } from './generateMiddlewares/utils'
@@ -31,7 +32,7 @@ const INDEX_MAP = {
   enableAppsRoutes: APPS_ROUTES_INDEX,
   enableNavigationRoutes: REWRITER_ROUTES_INDEX,
   enableProductRoutes: PRODUCT_ROUTES_INDEX,
-  enableRoutesTerm: '',
+  enableRoutesTerm: CUSTOM_ROUTES_INDEX,
   ignoreBindings: '',
 }
 
@@ -54,6 +55,11 @@ export async function settings(
     }
     return acc
   }, [] as string[])
+
+  // Siempre incluir rutas personalizadas
+  if (!enabledIndexFiles.includes(CUSTOM_ROUTES_INDEX)) {
+    enabledIndexFiles.push(CUSTOM_ROUTES_INDEX)
+  }
 
   ctx.state = {
     ...ctx.state,

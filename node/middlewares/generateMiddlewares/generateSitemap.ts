@@ -3,6 +3,7 @@ import { MultipleSitemapGenerationError } from './../../errors'
 
 import {
   GENERATE_APPS_ROUTES_EVENT,
+  GENERATE_CUSTOM_ROUTES_EVENT,
   GENERATE_PRODUCT_ROUTES_EVENT,
   GENERATE_REWRITER_ROUTES_EVENT,
 } from './utils'
@@ -53,4 +54,7 @@ export async function generateSitemap(ctx: EventContext) {
   if (settings.enableAppsRoutes) {
     events.sendEvent('', GENERATE_APPS_ROUTES_EVENT, { generationId })
   }
+
+  // Siempre generar rutas personalizadas
+  events.sendEvent('', GENERATE_CUSTOM_ROUTES_EVENT, { generationId })
 }

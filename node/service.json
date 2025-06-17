@@ -40,6 +40,10 @@
       "sender": "pumaindustrial.store-sitemap",
       "keys": ["sitemap.generate:apps-routes"]
     },
+    "generateCustomRoutes": {
+      "sender": "pumaindustrial.store-sitemap",
+      "keys": ["sitemap.generate:custom-routes"]
+    },
     "groupEntries": {
       "sender": "pumaindustrial.store-sitemap",
       "keys": ["sitemap.generate:group-entries"]

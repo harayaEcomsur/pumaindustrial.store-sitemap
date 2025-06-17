@@ -15,6 +15,7 @@ import { binding } from './middlewares/binding'
 import { cache } from './middlewares/cache'
 import { errors } from './middlewares/errors'
 import { generateAppsRoutes } from './middlewares/generateMiddlewares/generateAppsRoutes'
+import { generateCustomRoutes } from './middlewares/generateMiddlewares/generateCustomRoutes'
 import { generateProductRoutes } from './middlewares/generateMiddlewares/generateProductRoutes'
 import { generateRewriterRoutes } from './middlewares/generateMiddlewares/generateRewriterRoutes'
 import {
@@ -92,6 +93,7 @@ export default new Service<Clients, State, ParamsContext>({
   clients,
   events: {
     generateAppsRoutes: [throttle, errors, generationPrepare, generateAppsRoutes],
+    generateCustomRoutes: [throttle, errors, generationPrepare, generateCustomRoutes],
     generateProductRoutes: [throttle, errors, generationPrepare, tenant, generateProductRoutes, sendNextEvent],
     generateRewriterRoutes: [throttle, errors, generationPrepare, generateRewriterRoutes, sendNextEvent],
     generateSitemap: [settings, generationPrepare, generateSitemap],

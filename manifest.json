@@ -131,7 +131,8 @@
           "/proteccion-caidas/",
           "/proteccion-manos-y-brazos",
           "/proteccion-vista-y-mascaras",
-          "/salisbury"
+          "/salisbury",
+          "/subcategory"
         ],
         "type": "array",
         "items": {
@@ -143,11 +144,16 @@
         "description": "Routes that include any of these strings will be included in the sitemap, even if they match a disableRoutesTerm pattern.",
         "default": [
           "/calzado-de-seguridad/botines-de-seguridad",
-          "/stores",
           "/contacto",
-          "/institucional",
+          "/institucional/politicas-privacidad",
+          "/institucional/condiciones-despacho",
+          "/institucional/cambios-garantias",
+          "/institucional/terminos-condiciones",
           "/nosotros",
-          "/store/"
+          "/calzado-de-seguridad/botines-de-seguridad/hombre",
+          "/calzado-de-seguridad/botines-de-seguridad/mujer",
+          "/calzado-de-seguridad/zapatos-de-seguridad/hombre",
+          "/calzado-de-seguridad/zapatos-de-seguridad/mujer"
         ],
         "type": "array",
         "items": {
