@@ -9,10 +9,10 @@ import {
   TENANT_CACHE_TTL_S
 } from '../../utils'
 import {
-  CUSTOM_ROUTES_INDEX,
   completeRoutes,
   createFileName,
   currentDate,
+  CUSTOM_ROUTES_INDEX,
   DEFAULT_CONFIG,
   SitemapEntry,
   SitemapIndex,
@@ -23,23 +23,23 @@ const FILE_LIMIT = 5000
 
 // Rutas por defecto que siempre se incluyen
 const DEFAULT_CUSTOM_ROUTES = [
-  "/contacto",
-          "/institucional/politicas-privacidad",
-          "/institucional/condiciones-despacho",
-          "/institucional/cambios-garantias",
-          "/institucional/terminos-condiciones",
-          "/nosotros",
-          "/calzado-de-seguridad/botines-de-seguridad/hombre",
-          "/calzado-de-seguridad/botines-de-seguridad/mujer",
-          "/calzado-de-seguridad/zapatos-de-seguridad/hombre",
-          "/calzado-de-seguridad/zapatos-de-seguridad/mujer"
+  '/contacto',
+          '/institucional/politicas-privacidad',
+          '/institucional/condiciones-despacho',
+          '/institucional/cambios-garantias',
+          '/institucional/terminos-condiciones',
+          '/nosotros',
+          '/calzado-de-seguridad/botines-de-seguridad/hombre',
+          '/calzado-de-seguridad/botines-de-seguridad/mujer',
+          '/calzado-de-seguridad/zapatos-de-seguridad/hombre',
+          '/calzado-de-seguridad/zapatos-de-seguridad/mujer',
 ]
 
 const saveRoutes = async (routes: string[], idx: number, bucket: string, vbase: VBase) => {
   const sitemapRoutes = routes.map(route => ({
+    alternates: [],
     id: route,
     path: route,
-    alternates: []
   }))
   const entry = createFileName(CUSTOM_ROUTES_ENTITY, idx)
   await vbase.saveJSON<SitemapEntry>(bucket, entry, {
